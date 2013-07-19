@@ -1,4 +1,5 @@
 include_recipe "apache2"
+include_recipe "apache2::mod_rewrite"
 
 template "#{node['apache']['dir']}/sites-available/icinga" do
   source "apache.conf.erb"

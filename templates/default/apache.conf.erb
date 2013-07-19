@@ -5,14 +5,19 @@
         <% unless node['icinga']['url_aliases'].empty? %>
         ServerAlias <%= [node['icinga']['url_aliases']].flatten.compact.join(" ") %>
         <% end %>
-        DocumentRoot /usr/share/icinga/htdocs
 
-        ScriptAlias <%= node['icinga']['path'] %>/cgi-bin/icinga /usr/lib/cgi-bin/icinga
-        ScriptAlias <%= node['icinga']['path'] %>/cgi-bin /usr/lib/cgi-bin/icinga
+        <% if node['icinga']['ssl'] == true %>
+          SSLEngine On
+        <% end %>
 
-        # Where the stylesheets (config files) reside
-        Alias <%= node['icinga']['path'] %>/stylesheets /etc/icinga/stylesheets
+        ScriptAlias /cgi-bin/icinga /usr/lib/cgi-bin/icinga
+        ScriptAlias /icinga/cgi-bin /usr/lib/cgi-bin/icinga
 
+        Alias /icinga/stylesheets /etc/icinga/stylesheets
+        Alias /icinga /usr/share/icinga/htdocs
+
+        RewriteEngine On
+        RewriteRule ^/$ /icinga [R]
         <DirectoryMatch (/usr/share/icinga/htdocs|/usr/lib/cgi-bin/icinga|/etc/icinga/stylesheets)>
               Options FollowSymLinks
 

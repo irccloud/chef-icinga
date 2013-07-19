@@ -4,4 +4,4 @@ default[:icinga][:apache_port] = 80
 default[:icinga][:url] = 'icinga'
 default[:icinga][:url_aliases] = []
 default[:icinga][:path] = ''
-
+default[:icinga][:ssl] = false
