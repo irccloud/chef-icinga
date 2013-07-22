@@ -25,6 +25,8 @@ nodes = search(:node, node[:icinga][:node_query]).map { |n|
   data
 }
 
+tag('icinga_server')
+
 template "/etc/icinga/objects/hosts.cfg" do
   source "nodes.cfg"
   mode "0644"
