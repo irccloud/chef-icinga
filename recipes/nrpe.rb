@@ -25,5 +25,5 @@ template "/etc/nagios/nrpe.cfg" do
     variables({
         :icinga_servers => servers
     })
-    notifies :reload, resources(:service => "nagios-nrpe-server")
+    notifies :restart, resources(:service => "nagios-nrpe-server")
 end
