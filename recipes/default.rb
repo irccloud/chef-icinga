@@ -23,7 +23,7 @@ nodes = search(:node, node[:icinga][:node_query]).map { |n|
   end
 
   data
-}
+}.sort_by { |data| data[:address] }
 
 tag('icinga_server')
 
@@ -37,7 +37,7 @@ end
 template "/etc/icinga/objects/hostgroups.cfg" do
   source "hostgroups.cfg"
   mode "0644"
-  variables(:groups => hostgroups)
+  variables(:groups => hostgroups.sort)
   notifies :reload, resources(:service => "icinga")
 end
 
