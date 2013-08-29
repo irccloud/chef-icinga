@@ -4,7 +4,7 @@ service "nagios-nrpe-server" do
     supports :restart => true
 end
 
-servers = search(:node, "tags:icinga_server AND chef_environment:#{node.chef_environment}").map{ |node|
+servers = search(:node, "tags:icinga_server").map{ |node|
   node.ipaddress
 }
 
