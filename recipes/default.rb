@@ -18,8 +18,8 @@ nodes = search(:node, node[:icinga][:node_query]).map { |n|
   end
 
   if n[:icinga] and n[:icinga][:hostgroups]
-    data[:groups] += n[:icinga][:hostgroups] + n[:icinga][:default_hostgroups]
-    hostgroups.merge(data[:groups])
+    data[:groups] += n[:icinga][:hostgroups]
+    hostgroups.merge(n[:icinga][:hostgroups])
   end
 
   data
