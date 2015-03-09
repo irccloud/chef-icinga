@@ -4,8 +4,12 @@ service "nagios-nrpe-server" do
     supports :restart => true
 end
 
-servers = search(:node, "tags:icinga_server").map{ |node|
-  node.ipaddress
+servers = search(:node, "tags:icinga_server").flat_map{ |node|
+  addresses = [node.ipaddress]
+  if node.has_key?("icinga") and node["icinga"].has_key?("source_address")
+      addresses.push(node["icinga"]["source_address"])
+  end
+  addresses
 }
 
 if servers.length == 0 then
