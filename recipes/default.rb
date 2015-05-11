@@ -10,7 +10,15 @@ end
 
 hostgroups = Set.new(['servers'])
 
-nodes = search(:node, node[:icinga][:node_query]).map { |n|
+nodes = search(:node, node[:icinga][:node_query])
+
+if nodes.empty?
+  # If there are no nodes (e.g. in testing), add localhost as Icinga
+  # doesn't like hostgroups with no nodes in.
+  nodes = [node]
+end
+
+nodes = nodes.map { |n|
   data = {:name => n[:fqdn], :address => n[:ipaddress], :groups => ['servers'] }
 
   if n[:icinga] and n[:icinga][:address]
