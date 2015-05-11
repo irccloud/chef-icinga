@@ -8,7 +8,7 @@ service "icinga" do
     supports :restart => true, :reload => true
 end
 
-hostgroups = Set.new(['servers'])
+hostgroups = Set.new()
 
 nodes = search(:node, node[:icinga][:node_query])
 
@@ -31,7 +31,12 @@ nodes = nodes.map { |n|
   end
 
   data
-}.sort_by { |data| data[:address] }
+}.select{ |data| !data[:address].nil? }.sort_by { |data| data[:address] }
+
+if not nodes.empty?
+  # Only define the servers hostgroup if there are any servers.
+  hostgroups.add("servers")
+end
 
 tag('icinga_server')
 
