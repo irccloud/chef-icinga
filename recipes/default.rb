@@ -10,7 +10,7 @@ end
 
 hostgroups = Set.new()
 
-nodes = search(:node, node[:icinga][:node_query])
+nodes = search(:node, node["icinga"]["node_query"])
 
 if nodes.empty?
   # If there are no nodes (e.g. in testing), add localhost as Icinga
@@ -44,20 +44,20 @@ template "/etc/icinga/objects/hosts.cfg" do
   source "nodes.cfg"
   mode "0644"
   variables(:nodes => nodes)
-  notifies :reload, resources(:service => "icinga")
+  notifies :reload, "service[icinga]"
 end
 
 template "/etc/icinga/objects/hostgroups.cfg" do
   source "hostgroups.cfg"
   mode "0644"
   variables(:groups => hostgroups.sort)
-  notifies :reload, resources(:service => "icinga")
+  notifies :reload, "service[icinga]"
 end
 
 
 ['localhost_icinga.cfg', 'hostgroups_icinga.cfg', 'services_icinga.cfg', 'extinfo_icinga.cfg'].each do | filename | 
   file "/etc/icinga/objects/#{filename}" do
     action :delete
-    notifies :reload, resources(:service => "icinga")
+    notifies :reload, "service[icinga]"
   end
 end

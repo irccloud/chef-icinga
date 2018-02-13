@@ -5,7 +5,7 @@ service "nagios-nrpe-server" do
 end
 
 servers = search(:node, "tags:icinga_server").flat_map{ |node|
-  addresses = [node.ipaddress]
+  addresses = [node['ipaddress']]
   if node.has_key?("icinga") and node["icinga"].has_key?("source_address")
       addresses.push(node["icinga"]["source_address"])
   end
@@ -29,5 +29,5 @@ template "/etc/nagios/nrpe.cfg" do
     variables({
         :icinga_servers => servers
     })
-    notifies :restart, resources(:service => "nagios-nrpe-server")
+    notifies :restart, "service[nagios-nrpe-server]"
 end
