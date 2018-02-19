@@ -19,19 +19,19 @@ if nodes.empty?
 end
 
 nodes = nodes.map { |n|
-  data = {:name => n[:fqdn], :address => n[:ipaddress], :groups => ['servers'] }
+  data = {'name' => n['fqdn'], 'address' => n['ipaddress'], 'groups' => ['servers'] }
 
-  if n[:icinga] and n[:icinga][:address]
-    data[:address] = n[:icinga][:address]
+  if n['icinga'] and n['icinga']['address']
+    data['address'] = n['icinga']['address']
   end
 
-  if n[:icinga] and n[:icinga][:hostgroups]
-    data[:groups] += n[:icinga][:hostgroups]
-    hostgroups.merge(n[:icinga][:hostgroups])
+  if n['icinga'] and n['icinga']['hostgroups']
+    data['groups'] << n['icinga']['hostgroups']
+    hostgroups.merge(n['icinga']['hostgroups'])
   end
 
   data
-}.select{ |data| !data[:address].nil? }.sort_by { |data| data[:address] }
+}.select{ |data| !data['address'].nil? }.sort_by { |data| data['address'] }
 
 if not nodes.empty?
   # Only define the servers hostgroup if there are any servers.
